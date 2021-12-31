@@ -87,6 +87,13 @@ public class App {
                 .build();
         PagePublisher<Record> pagePublisher = table.query(enhancedRequest);
         Flux<Page<Record>> recordFlux = Flux.from(pagePublisher);
+        /*
+        If simply do subscribe like below, Flux by default will get all pages.
+        Rewrite subscribe, we can control the page fetching.
+        recordFlux.subscribe(record -> {
+            System.out.println(record);
+        });
+         */
         recordFlux.subscribe(new Subscriber<Page<Record>>() {
             Subscription subscription;
 
@@ -100,6 +107,7 @@ public class App {
             public void onNext(Page<Record> recordPage) {
                 System.out.println(recordPage.items());
                 try {
+                    // got the lastEvaluatedKey and call the next query
                     testQueryPagination2ndCall(recordPage.lastEvaluatedKey());
                 } catch (Exception e) {}
             }
