@@ -32,7 +32,7 @@ public class App {
 //        testGetItem();
 //        testQueryNormal();
 //        testQuerySomeSortKey();
-        testQueryPagination2ndCall();
+        testQueryPagination1stCall();
     }
 
     public static void init() {
@@ -77,7 +77,7 @@ public class App {
         Thread.sleep(2000l);
     }
 
-    public static void testQueryPagination2ndCall() throws Exception {
+    public static void testQueryPagination1stCall() throws Exception {
         QueryConditional queryConditional = QueryConditional.keyEqualTo(Key.builder()
                 .partitionValue("003")
                 .build());
@@ -100,7 +100,7 @@ public class App {
             public void onNext(Page<Record> recordPage) {
                 System.out.println(recordPage.items());
                 try {
-                    testQueryPagination3rdCall(recordPage.lastEvaluatedKey());
+                    testQueryPagination2ndCall(recordPage.lastEvaluatedKey());
                 } catch (Exception e) {}
             }
 
@@ -117,7 +117,7 @@ public class App {
         Thread.sleep(4000l);
     }
 
-    public static void testQueryPagination3rdCall(Map<String, AttributeValue> lastEvaluatedKey) throws Exception {
+    public static void testQueryPagination2ndCall(Map<String, AttributeValue> lastEvaluatedKey) throws Exception {
         QueryConditional queryConditional = QueryConditional.keyEqualTo(Key.builder()
                 .partitionValue("003")
                 .build());
