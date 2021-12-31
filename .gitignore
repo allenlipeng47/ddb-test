@@ -1,0 +1,58 @@
+# Java
+*.class
+*.jar
+*.war
+*.tar
+[Bb]in/
+
+# Maven
+target/
+*pom.xml.releaseBackup
+release.properties
+
+# Git
+*.diff
+*.orig
+*.swp
+*git.conf
+
+# Eclipse
+.project
+.settings
+.classpath
+.metadata
+
+# Intellij
+out
+.idea
+*.iml
+.checkstyle
+
+# Temp
+tmp/
+temp/
+
+# Compiled source
+*.exe
+
+# Log
+*.log
+
+# Data file
+*.txt
+*.csv
+*.out
+!requirements.txt
+
+# Debug
+Debug.java
+
+# Other
+*.deploy
+
+# Compressed file
+*.tar
+*.gz
+*.zip
+
+src/it/resources/docker
