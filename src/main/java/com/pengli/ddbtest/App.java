@@ -114,7 +114,7 @@ public class App {
 
             }
         });
-        Thread.sleep(4000l);
+        Thread.sleep(4000l);    // above subscribe is async. So wait a little time.
     }
 
     public static void testQueryPagination2ndCall(Map<String, AttributeValue> lastEvaluatedKey) throws Exception {
