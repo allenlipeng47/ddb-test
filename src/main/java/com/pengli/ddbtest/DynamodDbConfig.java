@@ -1,5 +1,7 @@
 package com.pengli.ddbtest;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -11,9 +13,11 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClientBuilder;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 
+@Configuration
 public class DynamodDbConfig {
 
-    public static DynamoDbAsyncClient getDynamoDbAsyncClient() {
+    @Bean
+    public DynamoDbAsyncClient getDynamoDbAsyncClient() {
         DynamoDbAsyncClientBuilder clientBuilder = DynamoDbAsyncClient.builder()
                 .region(Region.US_EAST_1);
 
@@ -23,7 +27,8 @@ public class DynamodDbConfig {
         return clientBuilder.build();
     }
 
-    public static DynamoDbClient getDynamoDbClient() {
+    @Bean
+    public DynamoDbClient getDynamoDbClient() {
         DynamoDbClientBuilder clientBuilder = DynamoDbClient.builder()
                 .region(Region.US_EAST_1);
 
@@ -33,13 +38,13 @@ public class DynamodDbConfig {
         return clientBuilder.build();
     }
 
-    public static DynamoDbEnhancedAsyncClient getDynamoDbEnhancedAsyncClient() {
-        DynamoDbAsyncClient dynamoDbAsyncClient = getDynamoDbAsyncClient();
+    @Bean
+    public DynamoDbEnhancedAsyncClient getDynamoDbEnhancedAsyncClient(DynamoDbAsyncClient dynamoDbAsyncClient) {
         return DynamoDbEnhancedAsyncClient.builder().dynamoDbClient(dynamoDbAsyncClient).build();
     }
 
-    public static DynamoDbEnhancedClient getDynamoDbEnhancedClient() {
-        DynamoDbClient dynamoDbClient = getDynamoDbClient();
+    @Bean
+    public DynamoDbEnhancedClient getDynamoDbEnhancedClient(DynamoDbClient dynamoDbClient) {
         return DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build();
     }
 

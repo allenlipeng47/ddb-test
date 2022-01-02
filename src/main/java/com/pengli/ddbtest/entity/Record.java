@@ -1,5 +1,4 @@
-package com.pengli.ddbtest;
-
+package com.pengli.ddbtest.entity;
 
 import lombok.Data;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
