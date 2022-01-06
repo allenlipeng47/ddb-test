@@ -63,7 +63,12 @@ public class DdbPlayground {
             System.out.println(record.items());
         });
         Thread.sleep(2000l);
-        return recordFlux;
+        return recordFlux.timed()
+                .log()
+                .map(t -> {
+                    System.out.println("pengli, time: " + t.elapsed().toMillis());
+                    return t.get();
+                });
     }
 
     public Flux<Page<Record>> querySomeSortKey() throws Exception {
@@ -73,7 +78,12 @@ public class DdbPlayground {
                 .build());
         PagePublisher<Record> pagePublisher = table.query(queryConditional);
         Flux<Page<Record>> recordFlux = Flux.from(pagePublisher);
-        recordFlux.subscribe(record -> {
+        recordFlux.doOnComplete(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("abdce");
+            }
+        }).subscribe(record -> {
             System.out.println(record.items());
             System.out.println(record.lastEvaluatedKey());
         });
@@ -93,7 +103,16 @@ public class DdbPlayground {
         Flux<Page<Record>> recordFlux = Flux.from(pagePublisher);
 
         return recordFlux.next()
-                .map(record -> new RecordWithLastKey(record.items(), getRecordKey(record.lastEvaluatedKey())));
+                .log()
+                .doOnSuccess(p -> {
+                    System.out.println("pengli, success, " + p);
+                })
+                .map(record -> new RecordWithLastKey(record.items(), getRecordKey(record.lastEvaluatedKey())))
+                .timed()
+                .map(t -> {
+                    System.out.println("pengli, time: " + t.elapsed().toMillis());
+                    return t.get();
+                });
     }
 
     /*
@@ -148,8 +167,22 @@ public class DdbPlayground {
         PagePublisher<Record> pagePublisher = table.query(enhancedRequest);
         Flux<Page<Record>> recordFlux = Flux.from(pagePublisher);
 
-        return recordFlux.next()
-                .map(record -> new RecordWithLastKey(record.items(), getRecordKey(record.lastEvaluatedKey())));
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("abcde");
+            }
+        };
+        return recordFlux
+                .doOnComplete(runnable)
+                .log()
+                .next()
+                .map(record -> new RecordWithLastKey(record.items(), getRecordKey(record.lastEvaluatedKey())))
+                .timed()
+                .map(t -> {
+                    System.out.println("pengli, time: " + t.elapsed().toMillis());
+                    return t.get();
+                });
     }
 
     private RecordKey getRecordKey(Map<String, AttributeValue> valueMap) {
